@@ -1,10 +1,21 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <script>
+            (function () {
+                const theme = localStorage.getItem("theme") || "light";
+                if (theme === "dark") {
+                    document.documentElement.classList.add("dark");
+                } else {
+                    document.documentElement.classList.add("light");
+                }
+            })();
+        </script>
         <meta charset="UTF-8" />
         <link rel="icon" type="" href="" />
+        <link rel="stylesheet" href="./src/index.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>web-template</title>
+        <title>pretty-todo</title>
     </head>
     <body>
         <div id="root"></div>
