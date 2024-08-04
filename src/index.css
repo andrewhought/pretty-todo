@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.light {
+:root {
     --background: 243, 247, 250;
 
     --white: 249, 250, 251;

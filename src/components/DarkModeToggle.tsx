@@ -11,12 +11,10 @@ export function DarkModeToggle(): ReactElement {
     const handleClick = () => {
         if (document.documentElement.classList.contains("dark")) {
             document.documentElement.classList.remove("dark");
-            document.documentElement.classList.add("light");
-            localStorage.setItem("theme", "light");
+            localStorage.removeItem("theme");
             setIsDarkMode(false);
             return;
         }
-        document.documentElement.classList.remove("light");
         document.documentElement.classList.add("dark");
         localStorage.setItem("theme", "dark");
         setIsDarkMode(true);

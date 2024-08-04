@@ -7,9 +7,5 @@ interface TaskListProps {
 export function TaskList(props: TaskListProps): ReactElement {
     const { task } = props;
 
-    return (
-        <div className="min-w-full max-w-2xl rounded-md bg-primary1 p-4">
-            {task}
-        </div>
-    );
+    return <div className="min-w-fit rounded-md bg-primary1 p-4">{task}</div>;
 }
