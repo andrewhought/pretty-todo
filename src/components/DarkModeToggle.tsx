@@ -26,9 +26,9 @@ export function DarkModeToggle(): ReactElement {
             onClick={handleClick}
         >
             {isDarkMode ? (
-                <MdDarkMode className="h-12 w-12 p-2 text-black" />
+                <MdDarkMode className="h-10 w-10 p-2 text-black" />
             ) : (
-                <MdLightMode className="h-12 w-12 p-2 text-black" />
+                <MdLightMode className="h-10 w-10 p-2 text-black" />
             )}
         </Toggle.Root>
     );

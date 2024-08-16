@@ -4,18 +4,19 @@ import { ReactElement, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
-interface TaskProps {
-    entry: string;
-    date: string;
+import TodoModel from "../models/TodoModel";
+
+interface TodoProps {
+    todo: TodoModel;
 }
 
-export function Task(props: TaskProps): ReactElement {
-    const { entry, date } = props;
+export function Todo(props: TodoProps): ReactElement {
+    const { todo } = props;
 
     const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const [entryText, setEntryText] = useState(entry);
-    const [dateText, setDateText] = useState(date);
+    const [entryText, setEntryText] = useState(todo.entry);
+    const [dateText] = useState(todo.date);
 
     const handleEntryChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -26,13 +27,12 @@ export function Task(props: TaskProps): ReactElement {
     const handleInputBlur = (): void => {
         if (inputRef.current) {
             inputRef.current.setSelectionRange(0, 0);
-            // Save changes
         }
     };
 
     return (
         <form>
-            <div className="flex min-w-fit items-center rounded-md bg-white p-2 dark:bg-black">
+            <div className="flex min-w-fit items-center rounded-md bg-white px-2 py-4 dark:bg-black">
                 <Checkbox.Root className="mx-2 h-10 w-10 flex-shrink-0 rounded-md bg-primary1 p-2">
                     <Checkbox.Indicator className="flex items-center justify-center">
                         <FaCheck className="text-black" />
