@@ -7,6 +7,9 @@ interface TodoListContextType {
     todos: TodoModel[];
 
     addTodo(newTodo: TodoModel): void;
+    editTodo(todo: TodoModel): void;
+    deleteTodo(todo: TodoModel): void;
+    changeCompletionStatus(todo: TodoModel): void;
 }
 
 export const TodoListContext = createContext<TodoListContextType | undefined>(
@@ -24,8 +27,31 @@ export const TodoListProvider: React.FC<{ children: React.ReactNode }> = ({
         setTodos(todoListManager.getTodos());
     };
 
+    const editTodo = (todo: TodoModel): void => {
+        todoListManager.editTodo(todo);
+        setTodos(todoListManager.getTodos());
+    };
+
+    const deleteTodo = (todo: TodoModel): void => {
+        todoListManager.deleteTodo(todo);
+        setTodos(todoListManager.getTodos());
+    };
+
+    const changeCompletionStatus = (todo: TodoModel): void => {
+        todoListManager.changeCompletionStatus(todo);
+        setTodos(todoListManager.getTodos());
+    };
+
     return (
-        <TodoListContext.Provider value={{ todos, addTodo }}>
+        <TodoListContext.Provider
+            value={{
+                todos,
+                addTodo,
+                editTodo,
+                deleteTodo,
+                changeCompletionStatus
+            }}
+        >
             {children}
         </TodoListContext.Provider>
     );

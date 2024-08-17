@@ -1,22 +1,50 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
 import * as Label from "@radix-ui/react-label";
-import { ReactElement, useRef, useState } from "react";
+import { ReactElement, useContext, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
 import TodoModel from "../models/TodoModel";
+import { TodoListContext } from "./TodoList/TodoListContext";
 
 interface TodoProps {
     todo: TodoModel;
 }
 
 export function Todo(props: TodoProps): ReactElement {
+    const context = useContext(TodoListContext);
+
+    if (!context) {
+        throw new Error("Todo must be used within a TodoListProvider");
+    }
+
+    const { editTodo, deleteTodo, changeCompletionStatus } = context;
     const { todo } = props;
 
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const [entryText, setEntryText] = useState(todo.entry);
-    const [dateText] = useState(todo.date);
+
+    const handleEditTodo = (): void => {
+        if (inputRef.current) {
+            inputRef.current.setSelectionRange(0, 0);
+        }
+        editTodo({ ...todo, entry: entryText });
+    };
+
+    const handleDeleteTodo = () => {
+        deleteTodo(todo);
+    };
+
+    const handleChangeCompletionStatus = () => {
+        changeCompletionStatus(todo);
+
+        setTimeout(() => {
+            if (todo.isCompleted) {
+                deleteTodo(todo);
+            }
+        }, 1500);
+    };
 
     const handleEntryChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -24,38 +52,41 @@ export function Todo(props: TodoProps): ReactElement {
         setEntryText(event.target.value);
     };
 
-    const handleInputBlur = (): void => {
-        if (inputRef.current) {
-            inputRef.current.setSelectionRange(0, 0);
-        }
-    };
-
     return (
         <form>
-            <div className="flex min-w-fit items-center rounded-md bg-white px-2 py-4 dark:bg-black">
-                <Checkbox.Root className="mx-2 h-10 w-10 flex-shrink-0 rounded-md bg-primary1 p-2">
+            <div className="flex w-full min-w-0 items-center rounded-md bg-white px-2 py-4 dark:bg-black">
+                <Checkbox.Root
+                    className="mx-2 h-10 w-10 flex-shrink-0 rounded-md bg-primary1 p-2"
+                    onClick={handleChangeCompletionStatus}
+                >
                     <Checkbox.Indicator className="flex items-center justify-center">
                         <FaCheck className="text-black" />
                     </Checkbox.Indicator>
                 </Checkbox.Root>
-                <div className="flex flex-grow items-center justify-between">
-                    <div className="mx-2 flex-grow flex-col">
+                <div className="flex min-w-0 flex-grow items-center justify-between">
+                    <div className="mx-2 flex min-w-0 flex-grow flex-col">
                         <Label.Root className="flex text-black dark:text-white">
                             <input
-                                className="flex flex-grow cursor-text truncate bg-white text-black outline-none dark:bg-black dark:text-white"
+                                className="flex-1 cursor-text truncate bg-white text-black outline-none dark:bg-black dark:text-white"
                                 ref={inputRef}
                                 type="text"
+                                placeholder="Click to type"
                                 value={entryText}
                                 onChange={handleEntryChange}
-                                onBlur={handleInputBlur}
+                                onBlur={handleEditTodo}
                             />
                         </Label.Root>
-                        <Label.Root className="flex text-sm text-primary2">
-                            {dateText}
+                        <Label.Root className="text-sm text-primary2">
+                            {typeof todo.date === "string"
+                                ? new Date(todo.date).toDateString()
+                                : todo.date.toDateString()}
                         </Label.Root>
                     </div>
                     <div className="mx-2 flex h-10 w-10">
-                        <button className="flex h-10 w-10 items-center justify-center rounded-md bg-primary1 p-2 hover:bg-primary2">
+                        <button
+                            className="flex h-10 w-10 items-center justify-center rounded-md bg-primary1 p-2 hover:bg-primary2"
+                            onClick={handleDeleteTodo}
+                        >
                             <FaTrash className="text-black" />
                         </button>
                     </div>

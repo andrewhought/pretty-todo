@@ -6,7 +6,7 @@ import { TodoListProvider } from "./components/TodoList/TodoListContext";
 
 export default function App(): ReactElement {
     return (
-        <div className="relative flex min-w-96 flex-col items-center overflow-hidden">
+        <div className="relative flex flex-col items-center overflow-hidden">
             <div className="absolute right-4 top-4">
                 <DarkModeToggle />
             </div>
