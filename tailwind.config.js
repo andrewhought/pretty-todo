@@ -16,6 +16,10 @@ export default {
                 warning2: "rgba(var(--warning2))",
                 success1: "rgba(var(--success1))",
                 success2: "rgba(var(--success2))"
+            },
+            fontFamily: {
+                kode: ["Kode Mono", "monospace"],
+                monsieur: ["Monsieur La Doulaise", "cursive"]
             }
         }
     },

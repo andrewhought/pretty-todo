@@ -19,13 +19,15 @@ export function TodoList(): ReactElement {
 
     return (
         <>
-            <div className="mb-4 flex min-w-0 flex-col rounded-2xl bg-primary1 p-4">
-                <button
-                    className="text-md mb-4 rounded-md bg-secondary1 p-2 font-semibold text-white hover:bg-secondary2"
-                    onClick={handleClickAddTask}
-                >
-                    Add task
-                </button>
+            <div className="relative mb-6 flex-col rounded-2xl bg-primary1 p-4">
+                <div className="mb-4 flex">
+                    <button
+                        className="text-md rounded-md bg-secondary1 px-4 py-2 font-semibold text-white hover:bg-secondary2"
+                        onClick={handleClickAddTask}
+                    >
+                        Add task
+                    </button>
+                </div>
                 {todos.length > 0 ? (
                     todos.map((todo, index) => {
                         const shouldAddMargin =
