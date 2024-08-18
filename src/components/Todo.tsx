@@ -18,7 +18,12 @@ export function Todo(props: TodoProps): ReactElement {
         throw new Error("Todo must be used within a TodoListProvider");
     }
 
-    const { editTodo, deleteTodo, changeCompletionStatus } = context;
+    const {
+        editTodo,
+        deleteTodo,
+        changeCompletionStatus,
+        incrementCompletionCount
+    } = context;
     const { todo } = props;
 
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -28,8 +33,10 @@ export function Todo(props: TodoProps): ReactElement {
     const handleEditTodo = (): void => {
         if (inputRef.current) {
             inputRef.current.setSelectionRange(0, 0);
+            inputRef.current.blur();
         }
-        editTodo({ ...todo, entry: entryText });
+
+        entryText ? editTodo({ ...todo, entry: entryText }) : deleteTodo(todo);
     };
 
     const handleDeleteTodo = () => {
@@ -42,6 +49,7 @@ export function Todo(props: TodoProps): ReactElement {
         setTimeout(() => {
             if (todo.isCompleted) {
                 deleteTodo(todo);
+                incrementCompletionCount();
             }
         }, 1500);
     };
@@ -53,7 +61,7 @@ export function Todo(props: TodoProps): ReactElement {
     };
 
     return (
-        <form>
+        <form spellCheck="false">
             <div className="flex w-full min-w-0 items-center rounded-md bg-white px-2 py-4 dark:bg-black">
                 <Checkbox.Root
                     className="mx-2 h-10 w-10 flex-shrink-0 rounded-md bg-primary1 p-2"
@@ -70,10 +78,17 @@ export function Todo(props: TodoProps): ReactElement {
                                 className="flex-1 cursor-text truncate bg-white text-black outline-none dark:bg-black dark:text-white"
                                 ref={inputRef}
                                 type="text"
-                                placeholder="Click to type"
                                 value={entryText}
                                 onChange={handleEntryChange}
                                 onBlur={handleEditTodo}
+                                onKeyDown={(
+                                    e: React.KeyboardEvent<HTMLInputElement>
+                                ) => {
+                                    if (e.key === "Enter") {
+                                        (e.target as HTMLInputElement).blur();
+                                    }
+                                }}
+                                autoFocus={true}
                             />
                         </Label.Root>
                         <Label.Root className="text-sm text-primary2">

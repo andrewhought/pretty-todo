@@ -1,12 +1,21 @@
-import { STORED_DATA } from "../utils/constants";
+import {
+    STORED_COMPLETED_TODOS_COUNT,
+    STORED_TODO_LIST
+} from "../utils/constants";
 import TodoModel from "./TodoModel";
 
 export default class TodoListModel {
+    private completionCount: number;
     private todos: TodoModel[];
 
     constructor() {
-        this.todos = STORED_DATA;
+        this.completionCount = STORED_COMPLETED_TODOS_COUNT;
+        this.todos = STORED_TODO_LIST;
     }
+
+    getCompletionCount = (): number => {
+        return this.completionCount;
+    };
 
     getTodos = (): TodoModel[] => {
         return this.todos;
@@ -30,5 +39,10 @@ export default class TodoListModel {
 
     changeCompletionStatus = (todo: TodoModel) => {
         todo.isCompleted = !todo.isCompleted;
+    };
+
+    incrementCompletionCount = () => {
+        this.completionCount = this.completionCount + 1;
+        localStorage.setItem("count", this.completionCount.toString());
     };
 }
