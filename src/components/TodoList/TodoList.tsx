@@ -52,7 +52,7 @@ export function TodoList(): ReactElement {
 
     return (
         <>
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
                 <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-primary1 p-4">
                     <button
                         className="text-md mb-4 rounded-md bg-secondary1 px-6 py-2 font-semibold text-white hover:bg-secondary2"
@@ -62,7 +62,7 @@ export function TodoList(): ReactElement {
                     </button>
                     <div
                         className={
-                            "hide-scrollbar flex-grow overflow-y-auto overflow-x-hidden rounded-md"
+                            "hide-scrollbar flex-grow overflow-x-hidden overflow-y-scroll rounded-md"
                         }
                     >
                         {todos.length > 0 ? (

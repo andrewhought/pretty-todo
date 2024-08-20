@@ -22,7 +22,7 @@ export default class TodoListModel {
     };
 
     addTodo = (newTodo: TodoModel) => {
-        this.todos = [...this.todos, newTodo];
+        this.todos = [newTodo, ...this.todos];
         localStorage.setItem("data", JSON.stringify(this.todos));
     };
 

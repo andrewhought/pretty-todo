@@ -1,6 +1,6 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
 import * as Label from "@radix-ui/react-label";
-import { ReactElement, useContext, useRef, useState } from "react";
+import { ReactElement, useContext, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
@@ -32,7 +32,6 @@ export function Todo(props: TodoProps): ReactElement {
 
     const handleEditTodo = (): void => {
         if (inputRef.current) {
-            inputRef.current.setSelectionRange(0, 0);
             inputRef.current.blur();
         }
 
@@ -60,6 +59,20 @@ export function Todo(props: TodoProps): ReactElement {
         setEntryText(event.target.value);
     };
 
+    useEffect(() => {
+        const handleTouchEvent = () => {
+            if (inputRef.current) {
+                inputRef.current.blur();
+            }
+        };
+
+        window.addEventListener("touchstart", handleTouchEvent);
+
+        return () => {
+            window.removeEventListener("touchstart", handleTouchEvent);
+        };
+    }, []);
+
     return (
         <form spellCheck="false">
             <div className="flex w-full min-w-0 items-center rounded-md bg-white px-2 py-4 dark:bg-black">
@@ -86,7 +99,8 @@ export function Todo(props: TodoProps): ReactElement {
                                 ) => {
                                     if (
                                         e.key === "Enter" ||
-                                        e.key === "Escape"
+                                        e.key === "Escape" ||
+                                        e.key === "Tab"
                                     ) {
                                         (e.target as HTMLInputElement).blur();
                                     }
