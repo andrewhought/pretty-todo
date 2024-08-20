@@ -6,9 +6,9 @@ import { TodoListProvider } from "./components/TodoList/TodoListContext";
 
 export default function App(): ReactElement {
     return (
-        <div className="relative flex flex-col items-center">
+        <div className="relative flex h-full flex-col items-center">
             <NavBar />
-            <div className="h-full w-full px-8">
+            <div className="h-full w-full overflow-hidden px-8 pb-8">
                 <TodoListProvider>
                     <TodoList />
                 </TodoListProvider>

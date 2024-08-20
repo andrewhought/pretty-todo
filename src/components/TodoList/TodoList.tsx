@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { ReactElement, useContext } from "react";
 
 import TodoModel from "../../models/TodoModel";
@@ -13,43 +14,89 @@ export function TodoList(): ReactElement {
 
     const { completionCount, todos, addTodo } = context;
 
-    const handleClickAddTask = () => {
-        addTodo(new TodoModel());
+    const todoAnimations = {
+        initial: { opacity: 0, y: -40 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: 40 }
+    };
+
+    const emptyStateAnimations = {
+        initial: { opacity: 0, scale: 0.9 },
+        animate: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 20,
+                mass: 0.1
+            }
+        },
+        exit: {
+            opacity: 0,
+            scale: 0.9,
+            transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 20,
+                mass: 0.1
+            }
+        }
+    };
+
+    const handleClickAddTodo = () => {
+        const newTodo = new TodoModel();
+
+        addTodo(newTodo);
     };
 
     return (
         <>
-            <div className="relative mb-6 flex-col rounded-2xl bg-primary1 p-4">
-                <button
-                    className="text-md mb-4 rounded-md bg-secondary1 px-6 py-2 font-semibold text-white hover:bg-secondary2"
-                    onClick={handleClickAddTask}
-                >
-                    Add task
-                </button>
-                {todos.length > 0 ? (
-                    todos.map((todo, index) => {
-                        const shouldAddMargin =
-                            todos.length > 1 && index !== todos.length - 1;
+            <AnimatePresence>
+                <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-primary1 p-4">
+                    <button
+                        className="text-md mb-4 rounded-md bg-secondary1 px-6 py-2 font-semibold text-white hover:bg-secondary2"
+                        onClick={handleClickAddTodo}
+                    >
+                        Add todo
+                    </button>
+                    <div
+                        className={
+                            "hide-scrollbar flex-grow overflow-y-auto overflow-x-hidden rounded-md"
+                        }
+                    >
+                        {todos.length > 0 ? (
+                            todos.map((todo, index) => {
+                                const shouldAddMargin =
+                                    todos.length > 1 &&
+                                    index !== todos.length - 1;
 
-                        return (
-                            <div
-                                key={todo.id}
-                                className={`flex-shrink-0 ${shouldAddMargin ? "mb-2" : ""}`}
+                                return (
+                                    <motion.div
+                                        {...todoAnimations}
+                                        layout
+                                        key={todo.id}
+                                        className={`flex-shrink-0 ${shouldAddMargin ? "mb-2" : ""}`}
+                                    >
+                                        <Todo todo={todo} />
+                                    </motion.div>
+                                );
+                            })
+                        ) : (
+                            <motion.div
+                                {...emptyStateAnimations}
+                                className="flex h-full items-center justify-center rounded-md bg-white dark:bg-black"
                             >
-                                <Todo todo={todo} />
-                            </div>
-                        );
-                    })
-                ) : (
-                    <div className="flex h-[76px] w-full min-w-0 items-center justify-center rounded-md bg-white p-4 dark:bg-black">
-                        <span className="text-md truncate font-semibold text-black dark:text-white">
-                            {completionCount === 0
-                                ? "⬆ Complete your first task"
-                                : `You have completed ${completionCount} task${completionCount === 1 ? "" : "s"}! 🎉`}
-                        </span>
+                                <span className="text-md font-semibold text-black dark:text-white">
+                                    {completionCount === 0
+                                        ? "⬆ Complete your first todo"
+                                        : `You have completed ${completionCount} todo${completionCount === 1 ? "" : "s"}! 🎉`}
+                                </span>
+                            </motion.div>
+                        )}
                     </div>
-                )}
-            </div>
+                </div>
+            </AnimatePresence>
         </>
     );
 }

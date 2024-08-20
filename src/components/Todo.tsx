@@ -84,11 +84,14 @@ export function Todo(props: TodoProps): ReactElement {
                                 onKeyDown={(
                                     e: React.KeyboardEvent<HTMLInputElement>
                                 ) => {
-                                    if (e.key === "Enter") {
+                                    if (
+                                        e.key === "Enter" ||
+                                        e.key === "Escape"
+                                    ) {
                                         (e.target as HTMLInputElement).blur();
                                     }
                                 }}
-                                autoFocus={true}
+                                autoFocus={entryText === "" ? true : false}
                             />
                         </Label.Root>
                         <Label.Root className="text-sm text-primary2">
